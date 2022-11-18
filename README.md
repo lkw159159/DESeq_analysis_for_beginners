@@ -10,7 +10,7 @@ Ki Wook LEE
 
 <br/>
 
-#### You need to use R script named ‘DESeq2_tutorial.Rmd’
+#### You need to use R script named ‘DESeq2_tutorial.R’
 
 ### 1. Basic information
 
