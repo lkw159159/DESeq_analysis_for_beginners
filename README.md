@@ -262,7 +262,7 @@ plotMA(res_mat)
 plotCounts(dds_mat,gene=which.min(res_mat$padj),intgroup='Condition') # You can select the gene with its name (ex. gene= 'ENSDARG0000000001')
 ```
 
-![](DESeq2_tutorial_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+<img src='/DESeq2_tutorial_files/figure-gfm/unnamed-chunk-16-1.png'>
 
 ``` r
 ## Volcano plot 
