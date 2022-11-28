@@ -29,7 +29,7 @@ if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
 if (!require("DESeq2", quietly = TRUE)){
-  install.packages("DESeq2")
+  BiocManager::install("DESeq2")
   library(DESeq2)} else{
       library(DESeq2)
     }
@@ -290,3 +290,11 @@ print(p1,vp=vp1)
 ```
 
 ![](DESeq2_tutorial_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+
+<br/>
+
+### 5. Functional annotation Analysis
+
+* DAVID: https://david.ncifcrf.gov/
+* Metascape: https://metascape.org/gp/index.html#/main/step1
+* GSEA: http://www.webgestalt.org/#
