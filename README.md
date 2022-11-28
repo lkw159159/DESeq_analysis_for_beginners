@@ -73,7 +73,7 @@ data(zfGenes)
 | ENSDARG00000000069 |  312 |  184 |  844 |  269 |   513 |   243 |
 
 <center>
-**This table is consisted of 6 columns (samples) x 32561 rows (genes).**
+** This table is consisted of 6 columns (samples) x 32561 rows (genes). **
 </center>
 
 <br/>
