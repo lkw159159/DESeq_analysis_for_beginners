@@ -1,7 +1,7 @@
 #1-1
 BiocManager::install("DESeq2")
 BiocManager::install("tidyverse")
-iocManager::install("openxlsx")
+BiocManager::install("openxlsx")
 
 library(DESeq2); library(tidyverse); library(openxlsx)
 
