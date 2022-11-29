@@ -1,8 +1,8 @@
 #1-1
-if (!require("BiocManager", quietly = TRUE)){
-  install.packages("BiocManager")
 BiocManager::install("DESeq2")
-}
+BiocManager::install("tidyverse")
+iocManager::install("openxlsx")
+
 library(DESeq2); library(tidyverse); library(openxlsx)
 
 #2-1
@@ -27,7 +27,7 @@ metadata_mat = data.frame(Sample = colnames(zfGenes),
 #2-3
 ## Make a DeseqDataset from matrix
 dds_mat = DESeqDataSetFromMatrix(countData = zfGenes,
-                                 colData = metadata,
+                                 colData = metadata_mat,
                                  design = ~ Condition)
 
 ## Pre-filtering
@@ -55,7 +55,7 @@ write.xlsx(out_mat,'DESeq2 result from matrix.xlsx')
 #3-1
 ## Make an transcriptome database from used GFF file
 library(tximport); library(readr); library(GenomicFeatures)
-txdb = makeTxDbfromGFF("Homo_sapiens.GRCh38.104.chr.gtf.gz")
+txdb = makeTxDbFromGFF("Homo_sapiens.GRCh38.106.chr.gtf.gz")
 k=keys(txdb, keytype = 'TXNAME')
 tx2gene= select(txdb,k,"GENEID",'TXNAME')
 
