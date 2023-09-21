@@ -1,0 +1,29 @@
+UP=res %>% data.frame %>% filter(padj<0.05) %>% filter(log2FoldChange > 1) %>% rownames
+DN=res %>% data.frame %>% filter(padj<0.05) %>% filter(log2FoldChange < -1) %>% rownames
+
+
+library(gprofiler2)
+moduleList = list(UP,DN)
+names(moduleList)= c('UP','DN')
+gostres = gost(query = moduleList,
+               organism = 'hsapiens')
+
+png(paste0('gprofile_AMCI',gsub('-','',Sys.Date()),'.png'),width=1200,height=1000)
+gostplot(gostres, capped =F, interactive=F) 
+dev.off()
+
+gostplot(gostres, capped =F, interactive=F) 
+
+for (i in 1:length(moduleList)){
+  FA_data=gostres$result %>% filter(query %in% names(moduleList)[i]) 
+  
+  FA_GOBP=FA_data %>% filter(source %in% c('GO:BP')) %>% 
+    arrange(p_value) %>% head(30) %>% data.frame
+  FA_GOMF=FA_data %>% filter(source %in% c('GO:MF')) %>% 
+    arrange(p_value) %>% head(30) %>% data.frame
+  FA_GOCC=FA_data %>% filter(source %in% c('GO:CC')) %>% 
+    arrange(p_value) %>% head(30) %>% data.frame
+  FA_out=rbind(FA_GOBP,FA_GOMF,FA_GOCC)
+  
+  write.xlsx(FA_out,file=paste0(names(moduleList)[i],'_signed_FunctionalAnnotation.xlsx'),overwrite = T)
+}
