@@ -174,7 +174,7 @@ summary(res_mat)
 ``` r
 ## Write the result 
 out_mat = cbind(counts(dds_mat,normalized=T),res_mat)
-write.xlsx(out_mat,'DESeq2 result from matrix.xlsx')
+write.xlsx(out_mat,'DESeq2 result from matrix.xlsx',rowNames=T)
 ```
 
 <br/>
