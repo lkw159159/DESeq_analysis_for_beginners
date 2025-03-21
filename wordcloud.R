@@ -1,47 +1,77 @@
-options("install.lock"=FALSE)
 install.packages("wordcloud")
+install.packages('data.table')
 library(wordcloud)
-library(openxlsx)
-sig=read.xlsx('GOenrichment table simple30.xlsx',2)
-table(sig$module)
-
-##make them a word
-brown2=unlist(strsplit(sig$term.name[61:90]," "))
-coral2=unlist(strsplit(sig$term.name[121:150]," "))
-firebrick4=unlist(strsplit(sig$term.name[1:30]," "))
-lightsteelblue1=unlist(strsplit(sig$term.name[31:60]," "))
-orangered3=unlist(strsplit(sig$term.name[91:120]," "))
-
-brown2=gsub("of",NA,brown2)
-coral2=gsub("of",NA,coral2)
-firebrick4=gsub("of",NA,firebrick4)
-lightsteelblue1=gsub("of",NA,lightsteelblue1)
-orangered3=gsub("of",NA,orangered3)
-
-brown2=gsub("to",NA,brown2)
-coral2=gsub("to",NA,coral2)
-firebrick4=gsub("to",NA,firebrick4)
-lightsteelblue1=gsub("to",NA,lightsteelblue1)
-orangered3=gsub("to",NA,orangered3)
-
-brown2=gsub("in",NA,brown2)
-coral2=gsub("in",NA,coral2)
-firebrick4=gsub("in",NA,firebrick4)
-lightsteelblue1=gsub("in",NA,lightsteelblue1)
-orangered3=gsub("in",NA,orangered3)
 
 
-A_tab=table(brown2)
-B_tab=table(coral2)
-C_tab=table(firebrick4)
-D_tab=table(lightsteelblue1)
-E_tab=table(orangered3)
-pal=brewer.pal(8,"Accent")
+# Read data
+Up_res=data.table::fread('UP.txt') %>% data.frame
+Down_res=data.table::fread('DN.txt') %>% data.frame
+
+# Check the data
+head(Up_res)
+
+Up_res$Category %>% table
+Down_res$Category %>% table
+
+##etc
+
+# Select the significantly enriched Terms
+
+## Check the significance
+Up_res$PValue<0.05
+Down_res$PValue<0.05
+
+## select only significant terms
+Up_res_sig=Up_res[Up_res$PValue<0.05,]
+Down_res_sig=Down_res[Down_res$PValue<0.05,]
+
+
+# make them into several word
+
+## check the data
+Up_res_sig$Term
+
+## divide by "~"
+strsplit(Up_res_sig$Term,"~") 
+
+## select only last value
+strsplit(Up_res_sig$Term,"~") %>% sapply(function(x) x[2])
+
+## divide by each word
+Up_words=strsplit(Up_res_sig$Term,"~") %>% sapply(function(x) x[2]) %>% 
+  strsplit(" ") %>% unlist
+
+## same as Down
+Down_words=strsplit(Down_res_sig$Term,"~") %>% sapply(function(x) x[2]) %>% 
+  strsplit(" ") %>% unlist
+
+#check the data
+Up_words
+Down_words
+
+## exclude not-wanted words
+Up_words %>% gsub('of',NA,.) %>% gsub('to',NA,.) %>% gsub('in',NA,.)
+Down_words %>% gsub('of',NA,.) %>% gsub('to',NA,.) %>% gsub('in',NA,.)
+
+## exclude the NA value
+Up_words=Up_words %>% gsub('of',NA,.) %>% gsub('to',NA,.) %>% gsub('in',NA,.) %>% na.omit
+Down_words=Down_words %>% gsub('of',NA,.) %>% gsub('to',NA,.) %>% gsub('in',NA,.) %>% na.omit
+
+
+
+# make a wordcloud
+Up_tab=table(Up_words)
+Down_tab=table(Down_words)
+
+Up_tab
+
+
+
 x11()
-wordcloud(names(A_tab),freq=A_tab,min.freq=1,colors='Brown',random.order = F)
-wordcloud(names(B_tab),freq=B_tab,min.freq=1,colors='Coral',random.order = F)
-wordcloud(names(C_tab),freq=C_tab,min.freq=1,colors='Firebrick',random.order = F)
-wordcloud(names(D_tab),freq=D_tab,min.freq=1,colors='Lightsteelblue',random.order = F)
-wordcloud(names(E_tab),freq=E_tab,min.freq=1,colors='Orangered',random.order = F)
 
-?wordcloud
+wordcloud(names(Up_tab),freq=Up_tab,min.freq=1,colors='brown',random.order = F)
+
+wordcloud(names(Down_tab),freq=Down_tab,min.freq=1,colors='blue',random.order = F)
+
+wordcloud(names(Down_tab),freq=Down_tab,min.freq=3,colors='blue',random.order = F)
+
